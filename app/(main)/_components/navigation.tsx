@@ -22,8 +22,7 @@ import { FileIcon } from "lucide-react";
 
 const Navigation = () => {
        const pathname = usePathname();
-       const documents = useQuery(api.documents.getSidebar);
-      
+       const documents = useQuery(api.documents.get);
        const isMobile = useMediaQuery("(max-width : 768px)");
        const isResizingRef = useRef(false);
        const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -134,10 +133,9 @@ const Navigation = () => {
 
                             </div>
                             <div className="mt-4">
-{/* {documents?.map((document)=> (
-<p key={document._id}>{document.title} </p>
-)
-)} */}
+{documents?.map((document) => (
+<p key={document._id}>{document.title}</p>
+))}
                             </div>
                             <div
                                    onMouseDown={handleMouseDown}
