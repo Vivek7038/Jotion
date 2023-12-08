@@ -1,5 +1,5 @@
 "use client";
-
+import { SearchCommand } from "@/components/search-command";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 
@@ -30,7 +30,7 @@ const MainLayout = ({
        <div className="h-full flex dark:bg-[#1F1F1F]">
        <Navigation />
        <main className="flex-1 h-full overflow-y-auto">
-         {/* <SearchCommand /> */}
+         <SearchCommand />
          {children}
        </main>
      </div>
