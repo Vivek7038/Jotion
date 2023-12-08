@@ -9,7 +9,8 @@ import {
        Settings,
        Trash
 } from "lucide-react";
-import {Item} from "./item"
+import {TrashBox} from "./trash-box"
+import { Item } from "./item"
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useMediaQuery } from "usehooks-ts";
 import { useState, useRef, ElementRef, useEffect } from "react";
@@ -21,12 +22,16 @@ import { Doc, Id } from "@/convex/_generated/dataModel";
 import { FileIcon } from "lucide-react";
 import { toast } from 'sonner';
 import { DocumentList } from "./document-list";
-
+import {
+       Popover,
+       PopoverTrigger,
+       PopoverContent,
+     } from "@/components/ui/popover";
 
 const Navigation = () => {
        const pathname = usePathname();
        const documents = useQuery(api.documents.get);
-       const create=useMutation(api.documents.create);
+       const create = useMutation(api.documents.create);
        const isMobile = useMediaQuery("(max-width : 768px)");
        const isResizingRef = useRef(false);
        const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -111,18 +116,18 @@ const Navigation = () => {
                      setTimeout(() => setIsResetting(false), 300);
               }
        }
-// to create new document 
-const handleCreate=() =>{
-       const promise=create({
-              title:"Untitled"
-       });
-       toast.promise(promise,{
-              loading:"Creating a new note ...",
-              success:"New note created!",
-              error:"Failed to create a new note"
-       })
-}
-       
+       // to create new document 
+       const handleCreate = () => {
+              const promise = create({
+                     title: "Untitled"
+              });
+              toast.promise(promise, {
+                     loading: "Creating a new note ...",
+                     success: "New note created!",
+                     error: "Failed to create a new note"
+              })
+       }
+
        return (
 
               <>
@@ -147,30 +152,42 @@ const handleCreate=() =>{
                             <div>
                                    <UserItem />
                                    <Item
-                                   onClick={()=> {}}
-                                   label="Search"
-                                   isSearch
-                                   icon={Search}
+                                          onClick={() => { }}
+                                          label="Search"
+                                          isSearch
+                                          icon={Search}
                                    />
                                    <Item
-                                   onClick={()=> {}}
-                                   label="Settings"
-                                   icon={Settings}
+                                          onClick={() => { }}
+                                          label="Settings"
+                                          icon={Settings}
                                    />
                                    <Item
-                                   onClick={handleCreate}
-                                   label="New Page"
-                                   icon={PlusCircle}
+                                          onClick={handleCreate}
+                                          label="New Page"
+                                          icon={PlusCircle}
                                    />
 
                             </div>
                             <div className="mt-4">
-                                   <DocumentList/>
+                                   <DocumentList />
                                    <Item
-            onClick={handleCreate}
-            icon={Plus}
-            label="Add a page"
-          />
+                                          onClick={handleCreate}
+                                          icon={Plus}
+                                          label="Add a page"
+                                   />
+                                             <Popover>
+            <PopoverTrigger className="w-full mt-4">
+              <Item label="Trash" icon={Trash} />
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 w-72"
+              side={isMobile ? "bottom" : "right"}
+            >
+             <TrashBox/>
+            </PopoverContent>
+          </Popover>
+
                             </div>
                             <div
                                    onMouseDown={handleMouseDown}
