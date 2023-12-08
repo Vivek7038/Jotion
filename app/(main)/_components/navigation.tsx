@@ -27,8 +27,9 @@ import {
        PopoverTrigger,
        PopoverContent,
      } from "@/components/ui/popover";
-
+import { useSearch } from "@/hooks/use-search";
 const Navigation = () => {
+       const search=useSearch();
        const pathname = usePathname();
        const documents = useQuery(api.documents.get);
        const create = useMutation(api.documents.create);
@@ -152,7 +153,7 @@ const Navigation = () => {
                             <div>
                                    <UserItem />
                                    <Item
-                                          onClick={() => { }}
+                                          onClick={search.onOpen}
                                           label="Search"
                                           isSearch
                                           icon={Search}
