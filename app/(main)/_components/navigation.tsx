@@ -28,8 +28,10 @@ import {
        PopoverContent,
      } from "@/components/ui/popover";
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 const Navigation = () => {
        const search=useSearch();
+       const settings=useSettings();
        const pathname = usePathname();
        const documents = useQuery(api.documents.get);
        const create = useMutation(api.documents.create);
@@ -39,7 +41,7 @@ const Navigation = () => {
        const navbarRef = useRef<ElementRef<"div">>(null);
        const [isResetting, setIsResetting] = useState(false);
        const [isCollapsed, setIsCollapsed] = useState(isMobile);
-
+  
        // to hide sidebar by default in mobile mode
        useEffect(() => {
               if (isMobile) {
@@ -159,7 +161,7 @@ const Navigation = () => {
                                           icon={Search}
                                    />
                                    <Item
-                                          onClick={() => { }}
+                                          onClick={settings.onOpen}
                                           label="Settings"
                                           icon={Settings}
                                    />

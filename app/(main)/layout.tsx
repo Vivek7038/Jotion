@@ -2,7 +2,6 @@
 import { SearchCommand } from "@/components/search-command";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
-
 import { Spinner } from "@/components/ui/spinner";
 
  import  Navigation  from "./_components/navigation";
