@@ -33,6 +33,7 @@ const Navigation = () => {
        const search=useSearch();
        const settings=useSettings();
        const pathname = usePathname();
+       const params=useParams();
        const documents = useQuery(api.documents.get);
        const create = useMutation(api.documents.create);
        const isMobile = useMediaQuery("(max-width : 768px)");
