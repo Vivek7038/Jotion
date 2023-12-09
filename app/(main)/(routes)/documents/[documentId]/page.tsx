@@ -1,6 +1,6 @@
 const DocumentIdPage = () =>{
        return (
-              <div>doc</div>
+              <div></div>
        )
 }
 

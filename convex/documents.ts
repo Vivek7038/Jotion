@@ -306,7 +306,7 @@ export const update = mutation({
     }
 
     const userId = identity.subject;
-
+// destructuring id to not update it 
     const { id, ...rest } = args;
 
     const existingDocument = await ctx.db.get(args.id);
