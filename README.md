@@ -32,7 +32,7 @@ Key Features:
 ### Cloning the repository
 
 ```shell
-git clone https://github.com/AntonioErdeljac/notion-clone-tutorial.git
+git clone https://github.com/Vivek7038/notesphere-next.git
 ```
 
 ### Install packages
