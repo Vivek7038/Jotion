@@ -1,3 +1,4 @@
+> ⚠️ Note: The deployed version currently has authentication temporarily disabled due to backend issues. However, the full source code is available and can be run locally without issues. Please refer to the instructions below to set it up.
 
 # Jotion
 
