@@ -1,5 +1,3 @@
-> ⚠️ Note: The deployed version currently has authentication temporarily disabled due to backend issues. However, the full source code is available and can be run locally without issues. Please refer to the instructions below to set it up.
-
 # Jotion
 
 A versatile productivity platform mirroring Notion's intuitive design, offering seamless notes management and realtime update for individuals and teams .
@@ -17,9 +15,6 @@ Key Features:
 - Infinite children documents 🌲
 - Trash can & soft delete 🗑️
 - Authentication 🔐 
-- File upload
-- File deletion
-- File replacement
 - Expandable sidebar ➡️🔀⬅️
 - Full mobile responsiveness 📱
 - Fully collapsable sidebar ↕️
