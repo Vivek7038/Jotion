@@ -1,7 +1,7 @@
 export default {
        providers: [
          {
-           domain: "https://vast-javelin-39.clerk.accounts.dev",
+           domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
            applicationID: "convex",
          },
        ]
