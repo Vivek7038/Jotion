@@ -40,6 +40,9 @@
     "zod": "^3.22.4",
     "zustand": "^4.4.7"
   },
+  "engines": {
+    "node": ">=24.x"
+  },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
