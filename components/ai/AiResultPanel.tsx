@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useCallback, useState } from "react";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { useAiActions, ActionId, AiContext } from "@/hooks/use-ai-actions";
 import { Button } from "@/components/ui/button";
@@ -48,6 +48,37 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties>({ opacity: 0 });
+
+  // Position panel above or below selection based on available viewport space
+  useLayoutEffect(() => {
+    if (!isPanelOpen || !selectionRect) return;
+
+    const panelWidth = Math.min(720, window.innerWidth - 48);
+    const panelHeight = panelRef.current?.offsetHeight ?? 200;
+    const gap = 12;
+
+    const spaceBelow = window.innerHeight - selectionRect.bottom - gap;
+    const spaceAbove = selectionRect.top - gap;
+
+    const placeBelow = spaceBelow >= panelHeight || spaceBelow >= spaceAbove;
+    const availableSpace = placeBelow ? spaceBelow : spaceAbove;
+    const maxHeight = Math.max(180, Math.min(availableSpace - MARGIN, window.innerHeight * 0.85));
+
+    let top: number;
+    if (placeBelow) {
+      top = selectionRect.bottom + gap;
+    } else {
+      top = selectionRect.top - Math.min(panelHeight, maxHeight) - gap;
+    }
+
+    top = Math.min(Math.max(top, MARGIN), window.innerHeight - Math.min(panelHeight, maxHeight) - MARGIN);
+
+    const rawLeft = selectionRect.left - 80;
+    const left = Math.min(Math.max(rawLeft, MARGIN), window.innerWidth - panelWidth - MARGIN);
+
+    setPanelStyle({ position: "fixed", left, top, zIndex: 51, width: panelWidth, maxHeight, opacity: 1 });
+  }, [isPanelOpen, selectionRect, streamedResult, isStreaming, error]);
 
   // Streaming effect
   useEffect(() => {
@@ -204,12 +235,6 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
 
   if (!isPanelOpen || !selectionRect) return null;
 
-  // Panel positioning
-  const PANEL_WIDTH_PX = Math.min(720, window.innerWidth - 48);
-  const rawLeft = selectionRect.left - 80;
-  const left = Math.min(Math.max(rawLeft, MARGIN), window.innerWidth - PANEL_WIDTH_PX - MARGIN);
-  const top = selectionRect.bottom + 12;
-
   const actionLabel = activeAction ? (ACTION_LABELS[activeAction] ?? activeAction) : "";
   const truncatedText =
     selectedText.length > 120 ? selectedText.slice(0, 120) + "…" : selectedText;
@@ -217,11 +242,11 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
   return (
     <div
       ref={panelRef}
-      style={{ position: "fixed", left, top, zIndex: 51, width: PANEL_WIDTH_PX }}
-      className="rounded-lg border bg-white dark:bg-neutral-900 shadow-xl"
+      style={panelStyle}
+      className="flex flex-col rounded-lg border bg-white dark:bg-neutral-900 shadow-xl overflow-hidden"
     >
       {/* Header */}
-      <div className="flex justify-between items-center px-3 py-2 border-b">
+      <div className="flex-none flex justify-between items-center px-3 py-2 border-b">
         <span className="text-sm font-semibold">✦ {actionLabel}</span>
         <Button variant="ghost" size="sm" className="h-6 w-6 p-0" onClick={reset}>
           ✕
@@ -229,18 +254,18 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
       </div>
 
       {/* Original text */}
-      <div className="px-3 py-2 text-xs text-muted-foreground bg-muted/40 border-b">
+      <div className="flex-none px-3 py-2 text-xs text-muted-foreground bg-muted/40 border-b">
         {truncatedText}
       </div>
 
-      {/* Stream area */}
-      <div className="px-3 py-3 text-sm leading-relaxed min-h-[120px] max-h-[320px] overflow-y-auto whitespace-pre-wrap">
+      {/* Stream area — grows to fill available height, scrolls when full */}
+      <div className="flex-1 min-h-[80px] overflow-y-auto px-3 py-3 text-sm leading-relaxed whitespace-pre-wrap">
         {streamedResult}
       </div>
 
       {/* Generating indicator */}
       {isStreaming && (
-        <div className="px-3 pb-2 flex items-center gap-2 text-xs text-muted-foreground">
+        <div className="flex-none px-3 pb-2 flex items-center gap-2 text-xs text-muted-foreground">
           <Spinner size="sm" />
           <span>Generating…</span>
         </div>
@@ -248,7 +273,7 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
 
       {/* Error state */}
       {error && !isStreaming && (
-        <div className="px-3 pb-2 flex flex-col gap-2">
+        <div className="flex-none px-3 pb-2 flex flex-col gap-2">
           <span className="text-xs text-destructive">{error}</span>
           <Button size="sm" onClick={handleRetry}>Retry</Button>
         </div>
@@ -256,7 +281,7 @@ export function AiResultPanel({ editorRef }: AiResultPanelProps) {
 
       {/* Footer actions */}
       {!isStreaming && !error && streamedResult && (
-        <div className="px-3 py-2 border-t flex gap-2">
+        <div className="flex-none px-3 py-2 border-t flex gap-2">
           <Button variant="default" size="sm" onClick={handleInsertBelow}>Insert Below</Button>
           <Button variant="outline" size="sm" onClick={handleReplace}>Replace</Button>
         </div>

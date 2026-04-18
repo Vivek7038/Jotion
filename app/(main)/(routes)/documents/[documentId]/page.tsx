@@ -74,9 +74,9 @@ const DocumentIdPage = ({
           editable={!document.isArchived}
           onEditorReady={onEditorReady}
         />
-        <AiResultPanel editorRef={editorRef} />
       </div>
       <AiActionPopover />
+      <AiResultPanel editorRef={editorRef} />
     </div>
    );
 }

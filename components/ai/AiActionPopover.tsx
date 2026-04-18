@@ -104,7 +104,7 @@ export function AiActionPopover() {
   const MARGIN = 8;
   const offset = 12;
   const popoverWidth = popoverRef.current?.offsetWidth ?? 224;
-  const popoverHeight = popoverRef.current?.offsetHeight ?? 160;
+  const popoverHeight = popoverRef.current?.offsetHeight ?? 280;
 
   const rawLeft = selectionRect.right + offset;
   const rawTop = selectionRect.top;
@@ -126,21 +126,23 @@ export function AiActionPopover() {
       )}
 
       {popoverState === "default" && (
-        <div className="py-1">
-          <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground">✦ AI Actions</div>
-          {DEFAULT_ACTIONS.map((action) => (
-            <Button
-              key={action.id}
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start gap-2 px-3 rounded-none h-8"
-              onClick={() => handleAction(action)}
-            >
-              <span>{action.icon}</span>
-              <span>{action.label}</span>
-            </Button>
-          ))}
-          <div className="border-t mt-1 pt-1">
+        <div className="py-1 flex flex-col">
+          <div className="flex-none px-3 py-1.5 text-xs font-semibold text-muted-foreground">✦ AI Actions</div>
+          <div className="overflow-y-auto max-h-[min(280px,50vh)]">
+            {DEFAULT_ACTIONS.map((action) => (
+              <Button
+                key={action.id}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 px-3 rounded-none h-8"
+                onClick={() => handleAction(action)}
+              >
+                <span>{action.icon}</span>
+                <span>{action.label}</span>
+              </Button>
+            ))}
+          </div>
+          <div className="flex-none border-t mt-1 pt-1">
             <Button
               variant="ghost"
               size="sm"
@@ -154,20 +156,22 @@ export function AiActionPopover() {
       )}
 
       {popoverState === "contextual" && (
-        <div className="py-1">
-          <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground">✦ AI Actions</div>
-          {actions.map((action) => (
-            <Button
-              key={action.id}
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start gap-2 px-3 rounded-none h-8"
-              onClick={() => handleAction(action)}
-            >
-              <span>{action.icon}</span>
-              <span>{action.label}</span>
-            </Button>
-          ))}
+        <div className="py-1 flex flex-col">
+          <div className="flex-none px-3 py-1.5 text-xs font-semibold text-muted-foreground">✦ AI Actions</div>
+          <div className="overflow-y-auto max-h-[min(280px,50vh)]">
+            {actions.map((action) => (
+              <Button
+                key={action.id}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start gap-2 px-3 rounded-none h-8"
+                onClick={() => handleAction(action)}
+              >
+                <span>{action.icon}</span>
+                <span>{action.label}</span>
+              </Button>
+            ))}
+          </div>
         </div>
       )}
 
