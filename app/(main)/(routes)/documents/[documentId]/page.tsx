@@ -2,14 +2,17 @@
 
 import { useMutation, useQuery } from "convex/react";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useMemo, useRef, useCallback } from "react";
 
+import { BlockNoteEditor } from "@blocknote/core";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Toolbar } from "@/components/toolbar";
 // import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
-import {Editor} from "@/components/editor"
+import { Editor } from "@/components/editor"
+import { AiActionPopover } from "@/components/ai/AiActionPopover"
+import { AiResultPanel } from "@/components/ai/AiResultPanel"
 interface DocumentIdPageProps {
   params: {
     documentId: Id<"documents">;
@@ -20,6 +23,12 @@ const DocumentIdPage = ({
   params
 }: DocumentIdPageProps) => {
   // const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }) ,[]);
+
+  const editorRef = useRef<BlockNoteEditor | null>(null);
+
+  const onEditorReady = useCallback((editor: BlockNoteEditor) => {
+    editorRef.current = editor;
+  }, []);
 
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId
@@ -62,8 +71,12 @@ const DocumentIdPage = ({
          <Editor
           onChange={onChange}
           initialContent={document.content}
-        /> 
+          editable={!document.isArchived}
+          onEditorReady={onEditorReady}
+        />
+        <AiResultPanel editorRef={editorRef} />
       </div>
+      <AiActionPopover />
     </div>
    );
 }
