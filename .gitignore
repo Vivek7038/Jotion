@@ -36,4 +36,5 @@ next-env.d.ts
 .specstory
 /.vscode
 .vscode
+docs/ai-text-actions.md
 
